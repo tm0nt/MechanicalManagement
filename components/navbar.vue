@@ -17,6 +17,7 @@
           <v-list density="compact" nav>
             <v-list-item prepend-icon="mdi-home" to="/dashboard/" title="Home" value="home"></v-list-item>
             <v-list-item prepend-icon="mdi-account" to="/dashboard/account/" title="My account" value="account"></v-list-item>
+            <v-list-item prepend-icon="mdi-archive" to="/dashboard/products/" title="Products" value="products"></v-list-item>
             <v-list-item prepend-icon="mdi-order-bool-descending-variant" to="/dashboard/order/" title="Orders" value="order"></v-list-item>
             <v-list-item prepend-icon="mdi-account-multiple" to="/dashboard/clients/" title="Clients" value="clients"></v-list-item>
             <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout" @click="logout"></v-list-item>
