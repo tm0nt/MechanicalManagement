@@ -63,7 +63,7 @@ const { rulePassLen, ruleRequired } = useFormRules();
 const error_login = ref(false);
 const submit = async () => {
   try {
-    const { data, error } = await useFetch("http://localhost:8080/auth/login", {
+    const { data, error } = await useFetch("https://psautocenter-panel.shop/auth/login", {
       method: "post",
       body: JSON.stringify({
         username: user.value,

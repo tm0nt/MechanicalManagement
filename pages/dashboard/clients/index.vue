@@ -163,7 +163,7 @@ const itensClient = ref([]);
 const fetchData = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/clientes/listar",
+      "https://psautocenter-panel.shop/clientes/listar",
     );
     if (data.value) {
       itensClient.value = data.value;

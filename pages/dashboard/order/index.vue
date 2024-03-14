@@ -404,7 +404,7 @@ const allProducts = ref(null);
 const fetchData = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/ordens/listar",
+      "https://psautocenter-panel.shop/ordens/listar",
     );
     if (data.value) {
       tableOrder.value = data.value;
@@ -422,7 +422,7 @@ const allFetchData = async () => {
 const fetchProductData = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/produtos/listar",
+      "https://psautocenter-panel.shop/produtos/listar",
     );
     if (data.value) {
       allProducts.value = data.value;
@@ -438,7 +438,7 @@ const description = ref(null);
 const fetchClientData = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/clientes/listar",
+      "https://psautocenter-panel.shop/clientes/listar",
     );
     if (data.value) {
       allClients.value = data.value;
@@ -470,7 +470,7 @@ const names = computed(() => allClients.value.map((item) => item.name));
 
 const ordensListar = async () => {
   try{
-    const {data, error} = await useFetch("http://localhost:8080/ordens/listar")
+    const {data, error} = await useFetch("https://psautocenter-panel.shop/ordens/listar")
     if(data.value){
       tableOrder.value = data.value
     }
@@ -483,7 +483,7 @@ const ordensListar = async () => {
 const registerNewService = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/ordens/cadastrar",
+      "https://psautocenter-panel.shop/ordens/cadastrar",
       {
         method: "post",
         body: JSON.stringify({

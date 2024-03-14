@@ -178,7 +178,7 @@ const alert = ref({
 const fetchData = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/veiculos/listar",
+      "https://psautocenter-panel.shop/veiculos/listar",
     );
     if (data.value) {
       cars.value = data.value;
@@ -232,7 +232,7 @@ const dialogClose = async () => {
 const vehiclesEditSave = async () => {
   try {
     const { data, error } = await useFetch(
-      `http://localhost:8080/veiculos/editar/${editCar.value._id}`,
+      `https://psautocenter-panel.shop/veiculos/editar/${editCar.value._id}`,
       {
         method: "put",
         body: JSON.stringify({
