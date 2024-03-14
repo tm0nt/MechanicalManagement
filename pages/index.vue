@@ -51,11 +51,6 @@
 </template>
 
 <script setup>
-import nuxtStorage from "nuxt-storage";
-
-definePageMeta({
-  middleware: ["login"],
-});
 const user = ref("");
 const password = ref("");
 
@@ -72,7 +67,6 @@ const submit = async () => {
     });
     if (data.value) {
       error_login.value = false;
-      nuxtStorage.localStorage.setData("token", data.value.token);
       return navigateTo("/dashboard/");
     }
     if (error.value) {
