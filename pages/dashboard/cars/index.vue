@@ -194,7 +194,7 @@ const newCarDialog = ref(false);
 const newCarRegister = async () => {
   try {
     const { data, error } = await useFetch(
-      "http://localhost:8080/veiculos/cadastrar",
+      "https://psautocenter-panel.shop/veiculos/cadastrar",
       {
         method: "post",
         body: JSON.stringify({
