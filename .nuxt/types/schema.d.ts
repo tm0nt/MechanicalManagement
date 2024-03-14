@@ -33,9 +33,7 @@ declare module 'nuxt/schema' {
 
       theme_color: string,
 
-      icons: Array<{
-
-      }>,
+      icons: Array<any>,
    },
   }
 }

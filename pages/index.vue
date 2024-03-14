@@ -18,7 +18,9 @@
                 />
               </div>
               <div class="mt-1">
-                <label class="label text-grey-darken-2" for="password">Password</label>
+                <label class="label text-grey-darken-2" for="password"
+                  >Password</label
+                >
                 <VTextField
                   :rules="[ruleRequired, rulePassLen]"
                   v-model="password"
@@ -29,8 +31,17 @@
                 />
               </div>
               <div class="mt-5">
-                <VBtn type="submit" block min-height="44" class="gradient primary">SIGN IN</VBtn>
+                <VBtn
+                  type="submit"
+                  block
+                  min-height="44"
+                  class="gradient primary"
+                  >SIGN IN</VBtn
+                >
               </div>
+              <p class="text-error" v-if="error_login">
+                Error: Incorrect user or password
+              </p>
             </VForm>
           </VCol>
         </VRow>
@@ -40,10 +51,35 @@
 </template>
 
 <script setup>
+import nuxtStorage from "nuxt-storage";
+
+definePageMeta({
+  middleware: ["login"],
+});
 const user = ref("");
 const password = ref("");
 
-const { ruleEmail, rulePassLen, ruleRequired } = useFormRules();
-
-const submit = async () => {};
+const { rulePassLen, ruleRequired } = useFormRules();
+const error_login = ref(false);
+const submit = async () => {
+  try {
+    const { data, error } = await useFetch("http://localhost:8080/auth/login", {
+      method: "post",
+      body: JSON.stringify({
+        username: user.value,
+        password: password.value,
+      }),
+    });
+    if (data.value) {
+      error_login.value = false;
+      nuxtStorage.localStorage.setData("token", data.value.token);
+      return navigateTo("/dashboard/");
+    }
+    if (error.value) {
+      error_login.value = true;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>

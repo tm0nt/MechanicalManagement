@@ -1,6 +1,7 @@
 export const useFormRules = () => {
-	return {
-		ruleRequired: (v: any) => !!v || "Campos obrigatórios",
-		rulePassLen: (v: string) => (!!v && v.length >= 6) || "Senha menor que 8 caracteres",
-	};
+  return {
+    ruleRequired: (v: any) => !!v || "Required",
+    rulePassLen: (v: string) =>
+      (!!v && v.length >= 6) || "Password less than 8 caracteres",
+  };
 };

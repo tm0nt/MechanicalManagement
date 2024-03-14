@@ -70,92 +70,7 @@ const _inlineRuntimeConfig = {
       "display": "standalone",
       "background_color": "#ffffff",
       "theme_color": "#4f46e5",
-      "icons": [
-        {
-          "src": "/_nuxt/icons/64x64.057cbda7.png",
-          "type": "image/png",
-          "sizes": "64x64",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/64x64.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "64x64",
-          "purpose": "maskable"
-        },
-        {
-          "src": "/_nuxt/icons/120x120.057cbda7.png",
-          "type": "image/png",
-          "sizes": "120x120",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/120x120.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "120x120",
-          "purpose": "maskable"
-        },
-        {
-          "src": "/_nuxt/icons/144x144.057cbda7.png",
-          "type": "image/png",
-          "sizes": "144x144",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/144x144.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "144x144",
-          "purpose": "maskable"
-        },
-        {
-          "src": "/_nuxt/icons/152x152.057cbda7.png",
-          "type": "image/png",
-          "sizes": "152x152",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/152x152.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "152x152",
-          "purpose": "maskable"
-        },
-        {
-          "src": "/_nuxt/icons/192x192.057cbda7.png",
-          "type": "image/png",
-          "sizes": "192x192",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/192x192.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "192x192",
-          "purpose": "maskable"
-        },
-        {
-          "src": "/_nuxt/icons/384x384.057cbda7.png",
-          "type": "image/png",
-          "sizes": "384x384",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/384x384.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "384x384",
-          "purpose": "maskable"
-        },
-        {
-          "src": "/_nuxt/icons/512x512.057cbda7.png",
-          "type": "image/png",
-          "sizes": "512x512",
-          "purpose": "any"
-        },
-        {
-          "src": "/_nuxt/icons/512x512.maskable.057cbda7.png",
-          "type": "image/png",
-          "sizes": "512x512",
-          "purpose": "maskable"
-        }
-      ]
+      "icons": []
     }
   }
 };
@@ -1057,7 +972,7 @@ function createServerHead(options = {}) {
 
 const unheadPlugins = [];
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"mobile-web-app-capable","content":"yes","key":"mobile-web-app-capable"},{"name":"apple-mobile-web-app-title","content":"Painel de Controle","key":"apple-mobile-web-app-title"},{"name":"author","content":"Tássio Montenegro","key":"author"},{"name":"theme-color","content":"#4f46e5","key":"theme-color"},{"property":"og:type","content":"website","key":"og:type"},{"property":"og:title","content":"Painel de Controle","key":"og:title"},{"property":"og:site_name","content":"Painel de Controle","key":"og:site_name"},{"name":"twitter:card","content":"summary","key":"twitter:card"}],"link":[{"rel":"stylesheet","href":"https://rsms.me/inter/inter.css"},{"rel":"preconnect","href":"https://rsms.me/"},{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"},{"rel":"icon","href":"/_nuxt/icons/64x64.057cbda7.png","key":"favicon"},{"rel":"apple-touch-icon","href":"/_nuxt/icons/512x512.maskable.057cbda7.png","sizes":"512x512","key":"favicon-apple"},{"rel":"manifest","href":"/manifest.json"}],"style":[],"script":[],"noscript":[],"title":"Painel de Controle","titleTemplate":"Painel de Controle","htmlAttrs":{"lang":"en"}};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"},{"name":"mobile-web-app-capable","content":"yes","key":"mobile-web-app-capable"},{"name":"apple-mobile-web-app-title","content":"Painel de Controle","key":"apple-mobile-web-app-title"},{"name":"author","content":"Tássio Montenegro","key":"author"},{"name":"theme-color","content":"#4f46e5","key":"theme-color"},{"property":"og:type","content":"website","key":"og:type"},{"property":"og:title","content":"Painel de Controle","key":"og:title"},{"property":"og:site_name","content":"Painel de Controle","key":"og:site_name"},{"name":"twitter:card","content":"summary","key":"twitter:card"}],"link":[{"rel":"stylesheet","href":"https://rsms.me/inter/inter.css"},{"rel":"preconnect","href":"https://rsms.me/"},{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"},{"rel":"manifest","href":"/manifest.json"}],"style":[],"script":[],"noscript":[],"title":"Painel de Controle","titleTemplate":"Painel de Controle","htmlAttrs":{"lang":"en"}};
 
 const appRootId = "__nuxt";
 

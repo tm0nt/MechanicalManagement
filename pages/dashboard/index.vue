@@ -20,39 +20,37 @@
                 height="80"
               >
                 <template v-slot:subtitle>
-                  <h2>256</h2>
+                  <h2>{{ Data?.quantidadeClientes }}</h2>
                 </template>
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
               <v-card
-                title="Services open"
+                title="Open payments"
                 rounded="xl"
                 flat
+                prepend-icon="mdi-payment-clock"
                 link
-                prepend-icon="mdi-clock"
                 variant="tonal"
-                subtitle="256"
                 height="80"
               >
                 <template v-slot:subtitle>
-                  <h2>256</h2>
+                  <h2>{{ Data?.quantidadePagamentosEmAberto }}</h2>
                 </template>
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
               <v-card
-                title="Services concluded"
+                title="Vehicles"
                 rounded="xl"
                 flat
+                prepend-icon="mdi-car"
                 link
-                prepend-icon="mdi-check-circle"
                 variant="tonal"
-                subtitle="256"
                 height="80"
               >
                 <template v-slot:subtitle>
-                  <h2>256</h2>
+                  <h2>{{ Data?.quantidadeVeiculos }}</h2>
                 </template>
               </v-card>
             </v-col>
@@ -68,7 +66,7 @@
                 height="80"
               >
                 <template v-slot:subtitle>
-                  <h2>455</h2>
+                  <h2>{{ Data?.quantidadeOrdens }}</h2>
                 </template>
               </v-card>
             </v-col>
@@ -78,7 +76,7 @@
           <v-chip class="text-subtitle-1 mt-4" variant="outlined"
             >Company about</v-chip
           >
-          <v-row class="mt-4" align=center>
+          <v-row class="mt-4" align="center">
             <v-col cols="12" md="4">
               <v-img
                 src="https://www.creativefabrica.com/wp-content/uploads/2021/03/20/Mountain-logo-Design-Graphics-9785421-1-580x435.png"
@@ -90,46 +88,63 @@
             </v-col>
             <v-col cols="12" md="8" class="mt-md-n8">
               <h4 class="mb-2">Company Details</h4>
+
               <v-row>
                 <v-col cols="6">
                   <v-text-field
                     label="Company name"
+                    v-model="CompanyData.companyName"
                     prepend-inner-icon="mdi-company"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
                     label="Phone"
+                    v-model="CompanyData.phone"
                     prepend-inner-icon="mdi-phone"
                   ></v-text-field
                 ></v-col>
                 <v-col cols="6" class="mt-n6">
                   <v-text-field
-                class="mt-n3"
-                label="Address"
-                prepend-inner-icon="mdi-city"
-              ></v-text-field>
+                    class="mt-n3"
+                    label="Address"
+                    v-model="CompanyData.address"
+                    prepend-inner-icon="mdi-city"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6" class="mt-n6">
                   <v-text-field
-                class="mt-n3"
-                label="ZIP Code"
-                prepend-inner-icon="mdi-numeric"
-              ></v-text-field>
+                    class="mt-n3"
+                    v-model="CompanyData.postcode"
+                    label="Postcode"
+                    prepend-inner-icon="mdi-numeric"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" class="mt-n6">
                   <v-text-field
-                class="mt-n3"
-                label="Email"
-                prepend-inner-icon="mdi-email"
-              ></v-text-field>
+                    class="mt-n3"
+                    v-model="CompanyData.email"
+                    label="Email"
+                    prepend-inner-icon="mdi-email"
+                  ></v-text-field>
                 </v-col>
               </v-row>
-              
-          
-              <v-btn color="primary" block prepend-icon="mdi-chevron-right"
-                >SAVE DETAILS</v-btn
+
+              <v-btn
+                @click="submit"
+                color="primary"
+                block
+                prepend-icon="mdi-chevron-right"
+                :disabled="isSubmitting"
               >
+                <v-progress-circular
+                  v-if="isSubmitting"
+                  indeterminate
+                  size="20"
+                  color="white"
+                ></v-progress-circular>
+                <span v-else>SAVE DETAILS</span>
+              </v-btn>
             </v-col>
           </v-row>
         </v-col>
@@ -138,7 +153,82 @@
   </v-app>
 </template>
 
-<script setup></script>
+<script setup>
+const alert = ref({
+  text: "",
+  view: false,
+  color: "",
+});
+const CompanyData = ref([
+  {
+    companyName: null,
+    phone: null,
+    address: null,
+    email: null,
+    postcode: null,
+  },
+]);
+
+const Data = ref([]);
+const Error = ref(false);
+const fetchData = async () => {
+  try {
+    const { data, error } = await useFetch("http://localhost:8080/");
+    if (data.value) {
+      Data.value = data.value;
+      CompanyData.value.companyName = data.value.companyInfo.companyName;
+      CompanyData.value.phone = data.value.companyInfo.phone;
+      CompanyData.value.address = data.value.companyInfo.address;
+      CompanyData.value.postcode = data.value.companyInfo.postCode;
+      CompanyData.value.email = data.value.companyInfo.email;
+    }
+    if (error.value) {
+      Error.value = true;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const isSubmitting = ref(false);
+
+const submit = async () => {
+  try {
+    isSubmitting.value = true;
+
+    const { data, error } = await useFetch(
+      "http://localhost:8080/company/about",
+      {
+        method: "put",
+        body: JSON.stringify({
+          companyName: CompanyData.value.companyName,
+          phone: CompanyData.value.phone,
+          email: CompanyData.value.email,
+          postCode: CompanyData.value.postcode,
+          address: CompanyData.value.address,
+        }),
+      },
+    );
+
+    isSubmitting.value = false;
+
+    if (data.value) {
+      alert.value.view = true;
+      (alert.value.text = "Data changed!"), (alert.value.color = "success");
+      await fetchData();
+    }
+
+    if (error.value) {
+      alert.value.view = true;
+      (alert.value.text = "Something didn't work!"),
+        (alert.value.color = "error");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+await fetchData();
+</script>
 <script>
 import NavBar from "../../components/navbar.vue";
 
