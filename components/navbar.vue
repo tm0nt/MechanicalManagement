@@ -1,10 +1,10 @@
 <template>
   <v-navigation-drawer v-model="drawer" permanent expand-on-hover rail>
     <v-list-item
-      prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-      title="My company name"
+      title="PSAutoCenter"
       nav
     >
+    <template v-slot:prepend ><v-avatar class="ml-2">PS</v-avatar></template>
     </v-list-item>
 
     <v-divider></v-divider>

@@ -9,8 +9,14 @@
             >Order of Service</v-chip
           >
           <v-data-table :headers="headers" :items="tableOrder">
-            <template v-slot:item.action="{item}">
-              <v-btn append-icon="mdi-info" color="primary" size="small" @click="openOrdemServiceDialog(item)">INFO</v-btn>
+            <template v-slot:item.action="{ item }">
+              <v-btn
+                append-icon="mdi-info"
+                color="primary"
+                size="small"
+                @click="openOrdemServiceDialog(item)"
+                >INFO</v-btn
+              >
             </template>
             <template v-slot:top>
               <v-divider class="mx-4" inset vertical></v-divider>
@@ -95,7 +101,7 @@
                       </v-row>
 
                       <v-row>
-                        <v-col cols="12">
+                        <v-col cols="6">
                           <v-select
                             :items="names"
                             label="Select client"
@@ -105,6 +111,9 @@
                             rounded="lg"
                             prepend-inner-icon="mdi-account"
                           ></v-select>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-text-field variant="outlined" rounded="lg" label="License plate" v-model="licensePlate"></v-text-field>
                         </v-col>
                       </v-row>
                       <h2 class="text-subtitle-1 mb-4">Service data</h2>
@@ -125,6 +134,7 @@
                           <v-text-field
                             prepend-inner-icon="mdi-text"
                             label="Describe the service"
+                            v-model="description"
                             type="text"
                           ></v-text-field>
                         </v-col>
@@ -132,7 +142,8 @@
                           <v-text-field
                             prepend-inner-icon="mdi-coin"
                             label="Value total"
-                            type="text"
+                            v-model="totalValue"
+                            type="number"
                           ></v-text-field>
                           <v-select
                             variant="outlined"
@@ -178,6 +189,18 @@
                           >REGISTER</v-btn
                         >
                       </v-col>
+                      <v-alert
+                          v-model="alertedit.view"
+                          border="start"
+                          class="mb-2 mt-2"
+                          rounded="xl"
+                          close-label="Error"
+                          :color="alertedit.color"
+                          title="Response"
+                          variant="tonal"
+                          closable
+                          >{{ alertedit.text }}</v-alert
+                        >
                     </v-container>
                   </v-card-text>
                 </v-card>
@@ -193,7 +216,6 @@
                   </template>
                   <v-card-text>
                     <v-container>
-
                       <v-row>
                         <v-col cols="12">
                           <h2 class="text-subtitle-1 mb-n2">Client data</h2>
@@ -227,7 +249,7 @@
                         </v-col>
                         <v-col cols="12" md="6" sm="6" class="mt-n8">
                           <v-text-field
-                          label="Phone"
+                            label="Phone"
                             type="text"
                             :disabled="true"
                             v-model="editOrderService.cliente.phone"
@@ -258,7 +280,9 @@
                         <v-col cols="12">
                           <v-text-field
                             label="License plate"
-                            v-model="editOrderService.cliente.specs.licensePlate"
+                            v-model="
+                              editOrderService.licensePlate
+                            "
                             prepend-inner-icon="mdi-license"
                             :disabled="true"
                             type="text"
@@ -288,13 +312,12 @@
                             :disabled="true"
                             prepend-inner-icon="mdi-coin"
                             v-model="editOrderService.produto.value"
-                        
                             label="Value total"
                             type="text"
                           ></v-text-field>
-                          </v-col>
-                          <v-col cols="6" class="mt-n8">
-                            <v-select
+                        </v-col>
+                        <v-col cols="6" class="mt-n8">
+                          <v-select
                             prepend-inner-icon="mdi-coin"
                             :disabled="true"
                             label="Payment type"
@@ -303,27 +326,26 @@
                             rounded="xl"
                             type="text"
                           ></v-select>
-                          </v-col>
-                          <v-col cols="6" class="mt-n8">
-                            <v-text-field
+                        </v-col>
+                        <v-col cols="6" class="mt-n8">
+                          <v-text-field
                             prepend-inner-icon="mdi-coin"
                             label="Parcel open"
                             :disabled="true"
                             type="text"
                           ></v-text-field>
-                          </v-col>
-                          <v-col cols="6">
-                            <v-text-field
+                        </v-col>
+                        <v-col cols="6">
+                          <v-text-field
                             prepend-inner-icon="mdi-coin"
                             class="mt-n8"
                             label="Value parcel"
                             :disabled="true"
                             type="text"
                           ></v-text-field>
-                          </v-col>
-                          <v-col cols="6" class="mt-n8">
-                            <v-btn color="primary" block min-height="45" fab>PAYMENT PARCEL 1/6</v-btn>
-                          </v-col>
+                        </v-col>
+                        <v-col cols="6" class="mt-n8">
+                        </v-col>
 
                         <v-col cols="12">
                           <p class="mb-4 mt-n4">Upload files</p>
@@ -381,20 +403,38 @@
 </template>
 
 <script setup>
+const alertedit = ref({
+  text: "",
+  view: false,
+  color: "",
+});
+const description = ref(null);
+const paymentAbout = ref(null)
 const dialogInfo = ref(false);
 const dialog = ref(false);
 const editOrderService = ref(null);
 const openOrdemServiceDialog = async (item) => {
+  const ordemServicoId = item._id
+  console.log(item)
+
+  try{
+    const {data, error } = await useFetch(`https://psautocenter-panel.shop/api/pagamentos/exibir/${ordemServicoId}`)
+    if(data.value){
+      paymentAbout.value = data.value
+      console.log(data.value);
+    }
+  }catch(error){
+    console.error(error)
+  }
   dialogInfo.value = true;
   editOrderService.value = item;
-
 };
 const tableOrder = ref(null);
 const headers = ref([
-  { title: "License plate", key: "cliente.specs.licensePlate" },
+  { title: "ID", key: "_id" },
   { title: "Client name", key: "cliente.name" },
   { title: "Product", key: "produto.name" },
-  {title: "Status", key:"status"},
+  { title: "Status", key: "status" },
   { title: "Action", key: "action" },
 ]);
 
@@ -404,7 +444,7 @@ const allProducts = ref(null);
 const fetchData = async () => {
   try {
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/ordens/listar",
+      "https://psautocenter-panel.shop/api/ordens/listar"
     );
     if (data.value) {
       tableOrder.value = data.value;
@@ -422,7 +462,7 @@ const allFetchData = async () => {
 const fetchProductData = async () => {
   try {
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/produtos/listar",
+      "https://psautocenter-panel.shop/api/produtos/listar"
     );
     if (data.value) {
       allProducts.value = data.value;
@@ -433,12 +473,10 @@ const fetchProductData = async () => {
   }
 };
 
-const description = ref(null);
-
 const fetchClientData = async () => {
   try {
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/clientes/listar",
+      "https://psautocenter-panel.shop/api/clientes/listar"
     );
     if (data.value) {
       allClients.value = data.value;
@@ -468,34 +506,83 @@ const selectedName = ref(null);
 
 const names = computed(() => allClients.value.map((item) => item.name));
 
+
 const ordensListar = async () => {
-  try{
-    const {data, error} = await useFetch("https://psautocenter-panel.shop/ordens/listar")
-    if(data.value){
-      tableOrder.value = data.value
-    }
-  }catch(error){
-    console.error(error)
-  }
-};
-
-
-const registerNewService = async () => {
   try {
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/ordens/cadastrar",
-      {
-        method: "post",
-        body: JSON.stringify({
-          clientId: selectedName.value,
-          produtoId: selectedProduct.value,
-          descricao: description.value,
-          pagamento: pagament.value,
-        }),
-      },
+      "https://psautocenter-panel.shop/api/ordens/listar"
     );
     if (data.value) {
+      tableOrder.value = data.value.reverse();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+const totalValue = ref(null);
+const licensePlate = ref(null)
+const registerNewService = async () => {
+  try {
+    let requestBody;
+
+const selectedClientId = allClients.value.find(
+  (client) => client.name === selectedName.value
+)?._id;
+
+const selectedProductId = allProducts.value.find(
+  (product) => product.name === selectedProduct.value
+)?._id;
+    // Capturando o valor atual do tipo de pagamento e do número de parcelas
+    const currentPaymentType = paymentType.value;
+    const currentSelectedParcel = selectedParcel.value;
+
+    if (currentPaymentType === "Cash") {
+      requestBody = {
+        clienteId: selectedClientId,
+        produtoId: selectedProductId,
+        descricao: description.value,
+        licensePlate: licensePlate.value,
+        pagamento: {
+          formaPagamento: "avista",
+          valorTotal: parseFloat(totalValue.value), // Use .value para acessar o valor das variáveis reativas
+        },
+      };
+    } else if (currentPaymentType === "Parcel") {
+      requestBody = {
+        clienteId: selectedClientId,
+        produtoId: selectedProductId,
+        licensePlate: licensePlate.value,
+        descricao: description.value,
+        pagamento: {
+          valorTotal: parseFloat(totalValue.value), // Use .value para acessar o valor das variáveis reativas
+          formaPagamento: "parcelado",
+          parcelas: {
+            numeroParcelas: parseInt(currentSelectedParcel), // Use o valor capturado
+            parcelasAbertas: parseInt(currentSelectedParcel) - 1,
+            valorParcela:
+              parseFloat(totalValue.value) / parseInt(currentSelectedParcel), // Use o valor capturado
+          },
+        },
+      };
+    }
+
+    const { data, error } = await useFetch(
+      "https://psautocenter-panel.shop/api/ordens/cadastrar",
+      {
+        method: "post",
+        body: JSON.stringify(requestBody),
+      }
+    );
+
+    if (data.value) {
+      await ordensListar();
+      alertedit.value.view = true;
+      alertedit.value.text = "Order registered!";
+      alertedit.value.color = "success";
       console.log(data.value);
+    }
+    if (error.value) {
+      console.log(error);
     }
   } catch (error) {
     console.error(error);

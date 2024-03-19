@@ -83,7 +83,7 @@ const changePassword = async () => {
 
     isChangingPassword.value = true;
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/auth/change-password",
+      "https://psautocenter-panel.shop/api/auth/change-password",
       {
         method: "put",
         body: JSON.stringify({

@@ -178,7 +178,7 @@ const alert = ref({
 const fetchData = async () => {
   try {
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/veiculos/listar",
+      "https://psautocenter-panel.shop/api/veiculos/listar",
     );
     if (data.value) {
       cars.value = data.value;
@@ -194,7 +194,7 @@ const newCarDialog = ref(false);
 const newCarRegister = async () => {
   try {
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/veiculos/cadastrar",
+      "https://psautocenter-panel.shop/api/veiculos/cadastrar",
       {
         method: "post",
         body: JSON.stringify({
@@ -232,7 +232,7 @@ const dialogClose = async () => {
 const vehiclesEditSave = async () => {
   try {
     const { data, error } = await useFetch(
-      `https://psautocenter-panel.shop/veiculos/editar/${editCar.value._id}`,
+      `https://psautocenter-panel.shop/api/veiculos/editar/${editCar.value._id}`,
       {
         method: "put",
         body: JSON.stringify({

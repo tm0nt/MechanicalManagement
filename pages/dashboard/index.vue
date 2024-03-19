@@ -79,12 +79,12 @@
           <v-row class="mt-4" align="center">
             <v-col cols="12" md="4">
               <v-img
-                src="https://www.creativefabrica.com/wp-content/uploads/2021/03/20/Mountain-logo-Design-Graphics-9785421-1-580x435.png"
+                src="https://i.imgur.com/mrMBAvg.png"
                 width="250"
               ></v-img>
-              <v-btn color="primary" block prepend-icon="mdi-image"
-                >CHANGE LOGO</v-btn
-              >
+              <v-form  @submit.prevent="handleFileSubmit">
+
+            </v-form>
             </v-col>
             <v-col cols="12" md="8" class="mt-md-n8">
               <h4 class="mb-2">Company Details</h4>
@@ -173,7 +173,7 @@ const Data = ref([]);
 const Error = ref(false);
 const fetchData = async () => {
   try {
-    const { data, error } = await useFetch("http://localhost:8080/");
+    const { data, error } = await useFetch("https://psautocenter-panel.shop/api/");
     if (data.value) {
       Data.value = data.value;
       CompanyData.value.companyName = data.value.companyInfo.companyName;
@@ -190,6 +190,42 @@ const fetchData = async () => {
   }
 };
 
+const files = ref(null);
+
+const filesPicture = ref(null);
+
+function handleUploadPicture(event) {
+  filesPicture.value = event.target.files;
+  if (filesPicture.value) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+    };
+    reader.readAsDataURL(filesPicture.value[0]);
+  }
+}
+
+
+async function handleFileSubmit() {
+  const fd = new FormData();
+  if (files.value) {
+    Array.from(files.value).forEach((file) => {
+      fd.append("image", file);
+    });
+  }
+  const options = {
+    method: "POST",
+    body: fd,
+  };
+  const data = await $fetch("https://psautocenter-panel.shop/api/upload/upload/companyterm", options);
+
+  if (data) {
+    console.log(data);
+  } else {
+    console.error("Erro ao enviar imagem:", error);
+  }
+}
+
+
 const isSubmitting = ref(false);
 
 const submit = async () => {
@@ -197,7 +233,7 @@ const submit = async () => {
     isSubmitting.value = true;
 
     const { data, error } = await useFetch(
-      "http://localhost:8080/company/about",
+      "https://psautocenter-panel.shop/api/company/about",
       {
         method: "put",
         body: JSON.stringify({

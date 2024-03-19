@@ -240,7 +240,7 @@ const registerProduct = async () => {
   try {
     isRegisterProduct.value = true;
     const { data, error } = await useFetch(
-      "https://psautocenter-panel.shop/produtos/cadastrar",
+      "https://psautocenter-panel.shop/api/produtos/cadastrar",
       {
         method: "post",
         body: JSON.stringify({
@@ -275,7 +275,7 @@ const registerProduct = async () => {
 const deleteProduct = async (id) => {
   try {
     const { data, error } = await useFetch(
-      `https://psautocenter-panel.shop/produtos/deletar/${id}`,
+      `https://psautocenter-panel.shop/api/produtos/deletar/${id}`,
       {
         method: "delete",
       },
@@ -302,7 +302,7 @@ const alert = ref({
 const productSaveEdit = async () => {
   try {
     const { data, error } = await useFetch(
-      `https://psautocenter-panel.shop/produtos/editar/${productEdit.value._id}`,
+      `https://psautocenter-panel.shop/api/produtos/editar/${productEdit.value._id}`,
       {
         method: "put",
         body: JSON.stringify({
@@ -330,7 +330,7 @@ const productSaveEdit = async () => {
 
 const listProducts = async () => {
   try {
-    const { data } = await useFetch("https://psautocenter-panel.shop/produtos/listar");
+    const { data } = await useFetch("https://psautocenter-panel.shop/api/produtos/listar");
     if (data.value) {
       tableProducts.value = data.value;
     }
