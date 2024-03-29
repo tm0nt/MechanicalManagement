@@ -10,14 +10,26 @@
           >
           <v-data-table :headers="headers" :items="tableOrder">
             <template v-slot:item.action="{ item }">
-              <v-btn
+                  <v-btn
                 append-icon="mdi-info"
                 color="primary"
                 size="small"
                 @click="openOrdemServiceDialog(item)"
                 >INFO</v-btn
               >
+
             </template>
+            <template v-slot:item.delete={item}>
+
+              <v-btn
+                color="error"
+                size="x-small"
+                :disabled="pending"
+                class="ml-2"
+                @click="deleteOrder(item._id)"
+                ><v-progress-circular indeterminate color="red" size="12" v-if="pending"></v-progress-circular><v-icon v-if="!pending">mdi-delete</v-icon></v-btn
+              >
+              </template>
             <template v-slot:top>
               <v-divider class="mx-4" inset vertical></v-divider>
               <v-spacer></v-spacer>
@@ -321,6 +333,7 @@
                             prepend-inner-icon="mdi-coin"
                             :disabled="true"
                             label="Payment type"
+                            v-model="paymentTypeOrder"
                             variant="outlined"
                             solo
                             rounded="xl"
@@ -332,20 +345,11 @@
                             prepend-inner-icon="mdi-coin"
                             label="Parcel open"
                             :disabled="true"
+                            v-model="paymentAbout.parcelas.parcelasAbertas"
                             type="text"
                           ></v-text-field>
                         </v-col>
-                        <v-col cols="6">
-                          <v-text-field
-                            prepend-inner-icon="mdi-coin"
-                            class="mt-n8"
-                            label="Value parcel"
-                            :disabled="true"
-                            type="text"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="6" class="mt-n8">
-                        </v-col>
+                       
 
                         <v-col cols="12">
                           <p class="mb-4 mt-n4">Upload files</p>
@@ -378,7 +382,7 @@
                     <v-btn
                       color="blue-darken-1"
                       variant="text"
-                      @click="deleteItemConfirm"
+                      @click="printOrder(editOrderService._id)"
                       >PRINT ORDER</v-btn
                     >
                     <v-btn
@@ -428,9 +432,15 @@ const openOrdemServiceDialog = async (item) => {
   }
   dialogInfo.value = true;
   editOrderService.value = item;
+  if(paymentAbout.value.formaPagamento == "avista"){
+  paymentTypeOrder.value = "Cash";
+  }else{
+    paymentTypeOrder.value = "Parcel";
+  }
 };
 const tableOrder = ref(null);
 const headers = ref([
+  {  key: "delete" },
   { title: "ID", key: "_id" },
   { title: "Client name", key: "cliente.name" },
   { title: "Product", key: "produto.name" },
@@ -473,6 +483,8 @@ const fetchProductData = async () => {
   }
 };
 
+const paymentTypeOrder = ref(null);
+
 const fetchClientData = async () => {
   try {
     const { data, error } = await useFetch(
@@ -514,11 +526,31 @@ const ordensListar = async () => {
     );
     if (data.value) {
       tableOrder.value = data.value.reverse();
+
     }
   } catch (error) {
     console.error(error);
   }
 };
+const pending = ref(false)
+
+const deleteOrder = async (id) => {
+  try{
+    pending.value = true;
+    const { data, error } = await useFetch(`https://psautocenter-panel.shop/api/ordens/deletar/${id}`, {
+      method: "delete"
+    });
+    if(data.value){
+      await ordensListar()
+      console.log(data.value)
+    }
+    pending.value = false;
+  }catch(error){
+    console.error(error);
+  }
+};
+
+
 const totalValue = ref(null);
 const licensePlate = ref(null)
 const registerNewService = async () => {
@@ -594,6 +626,40 @@ const showAdditionalFields = ref(false);
 
 const toggleAdditionalFields = () => {
   showAdditionalFields.value = !showAdditionalFields.value;
+};
+
+const printOrder = async (id) => {
+  try{
+    const {data, error} = await useFetch(`https://psautocenter-panel.shop/api/ordens/gerar-pdf/${id}`,{
+    method: "POST",
+    body: JSON.stringify({
+      cliente: {
+        nome: editOrderService.value.cliente.name,
+        endereco: editOrderService.value.cliente.address.street,
+        codigo_postal: editOrderService.value.cliente.address.zipCode,
+        email: editOrderService.value.cliente.email,
+        phone: editOrderService.value.cliente.phone,
+      },
+      produto: {
+        nome: editOrderService.value.produto.name,
+        preco: editOrderService.value.produto.value,
+      },
+      descricao: editOrderService.value.descricao,
+      pagamento: {
+        total: editOrderService.value.produto.value,
+        numero_pedido: editOrderService.value._id,
+      }
+    })
+  })
+  if(data.value){
+  return navigateTo(`https://psautocenter-panel.shop/MechanicalManagement/api/routes/public/${id}/order.pdf`, { external: true })
+  }
+  if(error.value){
+    console.log(error.value);
+  }
+  }catch(error){
+    console.error(error);
+  }
 };
 
 await fetchData();
