@@ -17,6 +17,7 @@
                 @click="editClientDialog(item)"
                 append-icon="mdi-info"
                 >INFO</v-btn
+
               >
             </template>
             <template v-slot:top>
@@ -119,24 +120,6 @@
                             </template>
                           </v-expansion-panel>
                         </v-expansion-panels>
-                      </v-row>
-                      <v-row>
-                        <h2 class="text-subtitle-1 mb-4">Client files</h2>
-                        <v-col cols="12">
-                        <v-form @submit.prevent="handleFileSubmit(editClient._id)">
-                          <v-file-input
-                            variant="outlined"
-                            @change="handleUpload"
-                            color="primary"
-                            rounded="lg"
-                          ></v-file-input>
-                          <v-btn type="submit">SEND</v-btn>
-                          </v-form>
-                          
-                        </v-col>
-                        <v-col>
-                          <p class="text-caption mt-n2 mb-4">Uploaded</p>
-                        </v-col>
                       </v-row>
                       <v-col cols="12">
                         <v-btn color="primary" block>CHANGE DATA</v-btn>

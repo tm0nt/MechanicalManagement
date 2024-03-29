@@ -174,27 +174,6 @@
                             label="Parcel"
                           ></v-select>
                         </v-col>
-                        <v-col cols="12">
-                          <p class="mb-4 mt-n4">Upload files</p>
-                          <v-file-input
-                            rounded="lg"
-                            color="primary"
-                            density="comfortable"
-                            closable
-                            multiples
-                            chips
-                            variant="outlined"
-                          ></v-file-input>
-                          <v-card
-                            color="black"
-                            rounded="xl"
-                            class="elevation-0"
-                            flat
-                            width="80"
-                            height="80"
-                          >
-                          </v-card>
-                        </v-col>
                       </v-row>
                       <v-col cols="12">
                         <v-btn color="primary" block @click="registerNewService"
@@ -646,7 +625,7 @@ const printOrder = async (id) => {
       },
       descricao: editOrderService.value.descricao,
       pagamento: {
-        total: editOrderService.value.produto.value,
+        total: editOrderService.value.pploaroduto.value,
         numero_pedido: editOrderService.value._id,
       }
     })
