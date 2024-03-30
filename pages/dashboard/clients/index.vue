@@ -342,7 +342,6 @@ const newClient = async () => {
 const headers = ref([
   { title: "Name", key: "name" },
   { title: "Email", key: "email" },
-  { title: "License plate", key: "specs.licensePlate" },
   { title: "Action", key: "action" },
 ]);
 
